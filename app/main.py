@@ -33,3 +33,22 @@ app.include_router(admin.router, prefix="/api/admin", tags=["admin"])
 async def startup():
     # Create tables (use Alembic in production)
     Base.metadata.create_all(bind=engine)
+
+
+# app/main.py au alembic seed
+def create_platform_user():
+    db = SessionLocal()
+    platform_user = db.query(User).filter(User.email == "platform@money.com").first()
+    if not platform_user:
+        platform_user = User(
+            email="platform@money.com",
+            hashed_password=get_password_hash("some_strong_password"),
+            full_name="Platform Revenue",
+            is_active=True
+        )
+        db.add(platform_user)
+        db.commit()
+        db.refresh(platform_user)
+        # Hakikisha unahifadhi ID yake kwa kutumia variable ya mazingira au constant
+        settings.PLATFORM_USER_ID = str(platform_user.id)
+    db.close()
