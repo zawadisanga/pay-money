@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Pay Money | Professional Money Transfer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ========================================
+           Pay Money - Professional Money Transfer UI
+           ======================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0A0A0A;
+            color: #FFFFFF;
+            overflow-x: hidden;
+        }
+
+        /* App Container */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #0F0F1A 0%, #0A0A0A 100%);
+            border-right: 1px solid rgba(16, 185, 129, 0.1);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .logo i {
+            color: #10B981;
+            font-size: 28px;
+        }
+
+        .logo span {
+            color: white;
+        }
+
+        .logo .text-green {
+            color: #10B981;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #9CA3AF;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .nav-item i {
+            width: 24px;
+            font-size: 20px;
+        }
+
+        .nav-item:hover {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10B981;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #10B981, #059669);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-email {
+            display: block;
+            font-size: 11px;
+            color: #6B7280;
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 10px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 10px;
+            color: #EF4444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 24px 32px;
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .header-welcome h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .header-welcome p {
+            color: #6B7280;
+            font-size: 14px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        .notification-icon {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notification-icon i {
+            font-size: 22px;
+            color: #9CA3AF;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #EF4444;
+            color: white;
+            font-size: 10px;
+            padding: 2px 5px;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        /* Pages */
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-header {
+            margin-bottom: 24px;
+        }
+
+        .page-header h2 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #6B7280;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: #111111;
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .stat-icon {
+            width: 55px;
+            height: 55px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-icon i {
+            font-size: 28px;
+            color: #10B981;
+        }
+
+        .stat-info {
+            flex: 1;
+        }
+
+        .stat-info h3 {
+            font-size: 13px;
+            font-weight: 500;
+            color: #9CA3AF;
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .stat-change {
+            font-size: 11px;
+            color: #6B7280;
+        }
+
+        .stat-change.positive {
+            color: #10B981;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            margin-bottom: 32px;
+        }
+
+        .quick-actions h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 24px;
+            background: #111111;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .action-btn:hover {
+            background: #1A1A1A;
+            border-color: #10B981;
+        }
+
+        /* Recent Transactions */
+        .recent-transactions {
+            background: #111111;
+            border-radius: 20px;
+            padding: 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-header a {
+            color: #10B981;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .transactions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: #0A0A0A;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.2s;
+        }
+
+        .transaction-item:hover {
+            border-color: rgba(16, 185, 129, 0.2);
+        }
+
+        .transaction-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .transaction-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .transaction-icon.sent {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .transaction-icon.sent i {
+            color: #EF4444;
+        }
+
+        .transaction-icon.received {
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .transaction-icon.received i {
+            color: #10B981;
+        }
+
+        .transaction-details h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .transaction-details p {
+            font-size: 12px;
+            color: #6B7280;
+        }
+
+        .transaction-amount {
+            text-align: right;
+        }
+
+        .transaction-amount .amount {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .transaction-amount .amount.sent {
+            color: #EF4444;
+        }
+
+        .transaction-amount .amount.received {
+            color: #10B981;
+        }
+
+        .transaction-amount .fee {
+            font-size: 11px;
+            color: #6B7280;
+            margin-top: 4px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #6B7280;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: #2a2a2a;
+        }
+
+        /* Transfer Page */
+        .transfer-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .transfer-card {
+            background: #111111;
+            border-radius: 24px;
+            padding: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #9CA3AF;
+        }
+
+        .form-group label i {
+            margin-right: 8px;
+            color: #10B981;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            background: #1A1A1A;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #10B981;
+        }
+
+        .fee-preview {
+            background: rgba(16, 185, 129, 0.05);
+            border-radius: 16px;
+            padding: 16px;
+            margin: 20px 0;
+            border: 1px solid rgba(16, 185, 129, 0.1);
+        }
+
+        .fee-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .fee-row.total {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-weight: 600;
+        }
+
+        .transfer-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #10B981, #059669);
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .transfer-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.3);
+        }
+
+        .transfer-info {
+            margin-top: 24px;
+            padding: 16px;
+            background: rgba(16, 185, 129, 0.05);
+            border-radius: 16px;
+        }
+
+        .transfer-info h4 {
+            font-size: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .transfer-info p {
+            font-size: 13px;
+            color: #9CA3AF;
+            margin-bottom: 8px;
+        }
+
+        .warning-note {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 12px;
+            margin-top: 12px;
+            font-size: 12px;
+        }
+
+        /* History Page */
+        .history-filters {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            background: #111111;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .filter-select {
+            padding: 12px 16px;
+            background: #111111;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .transactions-table-container {
+            background: #111111;
+            border-radius: 20px;
+            overflow-x: auto;
+        }
+
+        .transactions-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .transactions-table th {
+            text-align: left;
+            padding: 16px;
+            color: #9CA3AF;
+            font-weight: 500;
+            font-size: 13px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .transactions-table td {
+            padding: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: 14px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .status-badge.completed {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10B981;
+        }
+
+        .status-badge.pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: #F59E0B;
+        }
+
+        /* Wallet Page */
+        .wallet-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .wallet-card-large {
+            background: linear-gradient(135deg, #111111, #0A0A0A);
+            border-radius: 24px;
+            padding: 32px;
+            text-align: center;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            margin-bottom: 24px;
+        }
+
+        .balance-label {
+            font-size: 14px;
+            color: #9CA3AF;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .balance-amount {
+            font-size: 56px;
+            font-weight: 800;
+            color: #10B981;
+            margin: 16px 0;
+        }
+
+        .balance-currency {
+            font-size: 16px;
+            color: #6B7280;
+        }
+
+        .wallet-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 24px;
+        }
+
+        .wallet-action {
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .wallet-action.deposit {
+            background: #10B981;
+            border: none;
+            color: white;
+        }
+
+        .wallet-action.withdraw {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .wallet-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .stat-box {
+            background: #111111;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-box i {
+            font-size: 28px;
+            color: #10B981;
+        }
+
+        .stat-box-info {
+            flex: 1;
+        }
+
+        .stat-box-info span {
+            font-size: 12px;
+            color: #6B7280;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .stat-box-info strong {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        /* Settings Page */
+        .settings-container {
+            max-width: 800px;
+        }
+
+        .settings-section {
+            background: #111111;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .settings-section h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .save-btn {
+            padding: 12px 24px;
+            background: #10B981;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 16px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #111111;
+            border-radius: 24px;
+            padding: 32px;
+            width: 90%;
+            max-width: 450px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-header h3 {
+            font-size: 20px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #9CA3AF;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .amount-presets {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .preset-btn {
+            padding: 10px;
+            background: #1A1A1A;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            color: #10B981;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .preset-btn:hover {
+            background: #10B981;
+            color: white;
+        }
+
+        .modal-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 16px;
+        }
+
+        .modal-btn.primary {
+            background: #10B981;
+            border: none;
+            color: white;
+        }
+
+        .login-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .login-tab {
+            flex: 1;
+            padding: 12px;
+            background: #1A1A1A;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .login-tab.active {
+            background: #10B981;
+        }
+
+        .login-form {
+            display: none;
+        }
+
+        .login-form.active {
+            display: block;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1A1A1A;
+            border: 1px solid #10B981;
+            border-radius: 12px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            font-size: 14px;
+            z-index: 1100;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast i {
+            color: #10B981;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 16px;
+            }
+            .menu-toggle {
+                display: block;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .wallet-actions {
+                flex-direction: column;
+            }
+            .toast {
+                left: 16px;
+                right: 16px;
+                bottom: 16px;
+                transform: translateY(100px);
+            }
+            .toast.show {
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>Pay<span class="text-green">Money</span></span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" data-page="transfer">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>Send Money</span>
+                </div>
+                <div class="nav-item" data-page="history">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
+                </div>
+                <div class="nav-item" data-page="wallet">
+                    <i class="fas fa-wallet"></i>
+                    <span>Wallet</span>
+                </div>
+                <div class="nav-item" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">G</div>
+                    <div class="user-details">
+                        <span class="user-name" id="userName">Guest</span>
+                        <span class="user-email" id="userEmail">Not logged in</span>
+                    </div>
+                </div>
+                <button class="logout-btn" id="logoutBtn" style="display: none;" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="header-welcome">
+                    <h2>Welcome back, <span id="welcomeName">Guest</span></h2>
+                    <p id="currentDateTime"></p>
+                </div>
+                <div class="header-actions">
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notificationBadge">0</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Page -->
+            <div id="dashboardPage" class="page active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-wallet"></i></div>
+                        <div class="stat-info">
+                            <h3>Total Balance</h3>
+                            <div class="stat-value" id="totalBalance">$0.00</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-paper-plane"></i></div>
+                        <div class="stat-info">
+                            <h3>Total Sent</h3>
+                            <div class="stat-value" id="totalSent">$0.00</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-download"></i></div>
+                        <div class="stat-info">
+                            <h3>Total Received</h3>
+                            <div class="stat-value" id="totalReceived">$0.00</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-percent"></i></div>
+                        <div class="stat-info">
+                            <h3>Fee Rate</h3>
+                            <div class="stat-value" id="feeRate">2.5%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <h3>Quick Actions</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="navigateTo('transfer')">
+                            <i class="fas fa-paper-plane"></i> Send Money
+                        </button>
+                        <button class="action-btn" onclick="showDepositModal()">
+                            <i class="fas fa-plus-circle"></i> Add Funds
+                        </button>
+                        <button class="action-btn" onclick="navigateTo('history')">
+                            <i class="fas fa-history"></i> Transaction History
+                        </button>
+                    </div>
+                </div>
+
+                <div class="recent-transactions">
+                    <div class="section-header">
+                        <h3>Recent Transactions</h3>
+                        <a onclick="navigateTo('history')">View All <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="transactions-list" id="recentTransactions">
+                        <div class="empty-state">
+                            <i class="fas fa-exchange-alt"></i>
+                            <p>No transactions yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transfer Page -->
+            <div id="transferPage" class="page">
+                <div class="page-header">
+                    <h2><i class="fas fa-paper-plane"></i> Send Money</h2>
+                    <p>Transfer funds to any user instantly</p>
+                </div>
+                <div class="transfer-container">
+                    <div class="transfer-card">
+                        <div class="form-group">
+                            <label><i class="fas fa-envelope"></i> Recipient Email</label>
+                            <input type="email" id="receiverEmail" placeholder="Enter recipient's email">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-dollar-sign"></i> Amount (USD)</label>
+                            <input type="number" id="transferAmount" placeholder="0.00" step="0.01" min="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-sticky-note"></i> Note (Optional)</label>
+                            <input type="text" id="transferNote" placeholder="Add a note...">
+                        </div>
+                        
+                        <div class="fee-preview" id="feePreview" style="display: none;">
+                            <div class="fee-row"><span>Amount:</span><strong id="previewAmount">$0.00</strong></div>
+                            <div class="fee-row"><span>Fee (<span id="feePercent">2.5</span>%):</span><strong id="previewFee">$0.00</strong></div>
+                            <div class="fee-row total"><span>Recipient gets:</span><strong id="previewNet">$0.00</strong></div>
+                        </div>
+
+                        <button class="transfer-btn" onclick="sendMoney()">
+                            <i class="fas fa-paper-plane"></i> Send Money
+                        </button>
+
+                        <div class="transfer-info">
+                            <h4><i class="fas fa-info-circle"></i> Fee Information</h4>
+                            <p>Transaction fee: <strong id="displayFeePercent">2.5%</strong> (minimum $0.01, maximum $10.00)</p>
+                            <p>💡 The fee is deducted from the amount you send</p>
+                            <div class="warning-note">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>All transactions are secured and encrypted</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Page -->
+            <div id="historyPage" class="page">
+                <div class="page-header">
+                    <h2><i class="fas fa-history"></i> Transaction History</h2>
+                    <p>View all your past transactions</p>
+                </div>
+                <div class="history-filters">
+                    <input type="text" id="searchInput" placeholder="Search by email or name..." class="search-input">
+                    <select id="typeFilter" class="filter-select">
+                        <option value="all">All Types</option>
+                        <option value="internal_transfer">Sent</option>
+                        <option value="deposit">Received</option>
+                    </select>
+                </div>
+                <div class="transactions-table-container">
+                    <table class="transactions-table">
+                        <thead>
+                            <tr><th>Date</th><th>Type</th><th>From/To</th><th>Amount</th><th>Fee</th><th>Status</th></tr>
+                        </thead>
+                        <tbody id="transactionsList"><tr><td colspan="6"><div class="empty-state"><i class="fas fa-exchange-alt"></i><p>No transactions found</p></div></td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Wallet Page -->
+            <div id="walletPage" class="page">
+                <div class="page-header"><h2><i class="fas fa-wallet"></i> My Wallet</h2><p>Manage your funds</p></div>
+                <div class="wallet-container">
+                    <div class="wallet-card-large">
+                        <div class="balance-label">Available Balance</div>
+                        <div class="balance-amount" id="walletBalanceAmount">$0.00</div>
+                        <div class="wallet-actions">
+                            <button class="wallet-action deposit" onclick="showDepositModal()"><i class="fas fa-plus-circle"></i> Add Funds</button>
+                            <button class="wallet-action withdraw" onclick="showWithdrawModal()"><i class="fas fa-minus-circle"></i> Withdraw</button>
+                        </div>
+                    </div>
+                    <div class="wallet-stats">
+                        <div class="stat-box"><i class="fas fa-chart-line"></i><div class="stat-box-info"><span>Total Spent</span><strong id="totalSpent">$0.00</strong></div></div>
+                        <div class="stat-box"><i class="fas fa-download"></i><div class="stat-box-info"><span>Total Received</span><strong id="totalReceivedWallet">$0.00</strong></div></div>
+                        <div class="stat-box"><i class="fas fa-receipt"></i><div class="stat-box-info"><span>Total Fees</span><strong id="totalFeesPaid">$0.00</strong></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div id="settingsPage" class="page">
+                <div class="page-header"><h2><i class="fas fa-cog"></i> Settings</h2><p>Manage your account</p></div>
+                <div class="settings-container">
+                    <div class="settings-section"><h3><i class="fas fa-user"></i> Profile Information</h3>
+                        <div class="form-row"><div class="form-group"><label>Full Name</label><input type="text" id="profileFullName" placeholder="Your full name"></div>
+                        <div class="form-group"><label>Email</label><input type="email" id="profileEmail" placeholder="Your email" readonly></div></div>
+                        <div class="form-row"><div class="form-group"><label>Phone Number</label><input type="tel" id="profilePhone" placeholder="+255 XXX XXX XXX"></div>
+                        <div class="form-group"><label>Currency</label><select id="profileCurrency"><option value="USD">USD - US Dollar</option><option value="TZS">TZS - Tanzanian Shilling</option></select></div></div>
+                        <button class="save-btn" onclick="updateProfile()"><i class="fas fa-save"></i> Save Changes</button>
+                    </div>
+                    <div class="settings-section"><h3><i class="fas fa-lock"></i> Security</h3>
+                        <div class="form-group"><label>New Password</label><input type="password" id="newPassword" placeholder="New password"></div>
+                        <div class="form-group"><label>Confirm Password</label><input type="password" id="confirmPassword" placeholder="Confirm password"></div>
+                        <button class="save-btn" onclick="changePassword()"><i class="fas fa-key"></i> Update Password</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div id="depositModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><h3><i class="fas fa-plus-circle"></i> Add Funds</h3><button class="modal-close" onclick="closeModal('depositModal')">&times;</button></div>
+            <div class="modal-body">
+                <div class="amount-presets"><button class="preset-btn" onclick="setDepositAmount(10)">$10</button><button class="preset-btn" onclick="setDepositAmount(25)">$25</button><button class="preset-btn" onclick="setDepositAmount(50)">$50</button><button class="preset-btn" onclick="setDepositAmount(100)">$100</button></div>
+                <div class="form-group"><label>Amount (USD)</label><input type="number" id="depositAmount" placeholder="Enter amount" step="1" min="1"></div>
+                <div class="form-group"><label>Payment Method</label><select id="paymentMethod"><option value="card">💳 Credit/Debit Card</option><option value="mpesa">📱 M-Pesa</option><option value="airtel">📱 Airtel Money</option><option value="paypal">💰 PayPal</option></select></div>
+                <button class="modal-btn primary" onclick="processDeposit()"><i class="fas fa-check"></i> Proceed to Payment</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div id="withdrawModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><h3><i class="fas fa-minus-circle"></i> Withdraw Funds</h3><button class="modal-close" onclick="closeModal('withdrawModal')">&times;</button></div>
+            <div class="modal-body">
+                <div class="form-group"><label>Amount (USD)</label><input type="number" id="withdrawAmount" placeholder="Enter amount" step="1" min="1"></div>
+                <div class="form-group"><label>Withdrawal Method</label><select id="withdrawMethod"><option value="bank">🏦 Bank Transfer</option><option value="mpesa">📱 M-Pesa</option><option value="airtel">📱 Airtel Money</option></select></div>
+                <div class="form-group" id="accountDetailsGroup"><label>Account Details</label><input type="text" id="accountDetails" placeholder="Account number or phone number"></div>
+                <button class="modal-btn primary" onclick="processWithdraw()"><i class="fas fa-check"></i> Withdraw</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><h3><i class="fas fa-sign-in-alt"></i> Welcome Back</h3></div>
+            <div class="login-tabs"><button class="login-tab active" data-tab="login" onclick="switchTab('login')">Login</button><button class="login-tab" data-tab="register" onclick="switchTab('register')">Register</button></div>
+            <div id="loginForm" class="login-form active">
+                <div class="form-group"><label>Email</label><input type="email" id="loginEmail" placeholder="Enter your email"></div>
+                <div class="form-group"><label>Password</label><input type="password" id="loginPassword" placeholder="Enter your password"></div>
+                <button class="modal-btn primary" onclick="login()"><i class="fas fa-sign-in-alt"></i> Login</button>
+            </div>
+            <div id="registerForm" class="login-form">
+                <div class="form-group"><label>Full Name</label><input type="text" id="regFullName" placeholder="Your full name"></div>
+                <div class="form-group"><label>Email</label><input type="email" id="regEmail" placeholder="Enter your email"></div>
+                <div class="form-group"><label>Phone Number</label><input type="tel" id="regPhone" placeholder="+255 XXX XXX XXX"></div>
+                <div class="form-group"><label>Password</label><input type="password" id="regPassword" placeholder="Create a password"></div>
+                <div class="form-group"><label>Confirm Password</label><input type="password" id="regConfirmPassword" placeholder="Confirm your password"></div>
+                <button class="modal-btn primary" onclick="register()"><i class="fas fa-user-plus"></i> Create Account</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"><i class="fas fa-info-circle"></i><span id="toastMessage">Message</span></div>
+
+    <script>
+        // API Configuration
+        const API_URL = window.location.origin;
+        let authToken = localStorage.getItem('authToken');
+        let currentUser = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            
+            document.getElementById('menuToggle').addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('open');
+            });
+            
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const page = item.dataset.page;
+                    navigateTo(page);
+                    if (window.innerWidth <= 768) {
+                        document.getElementById('sidebar').classList.remove('open');
+                    }
+                });
+            });
+            
+            document.getElementById('transferAmount').addEventListener('input', calculateFeePreview);
+            
+            if (authToken) {
+                fetchUserData();
+            } else {
+                document.getElementById('loginModal').classList.add('show');
+            }
+        });
+
+        function updateDateTime() {
+            const now = new Date();
+            document.getElementById('currentDateTime').innerText = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + ' • ' + now.toLocaleTimeString();
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('loginForm').classList.toggle('active', tab === 'login');
+            document.getElementById('registerForm').classList.toggle('active', tab === 'register');
+        }
+
+        async function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            if (!email || !password) { showToast('Please fill all fields', true); return; }
+            
+            try {
+                const res = await fetch(`${API_URL}/api/auth/login`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    authToken = data.token;
+                    currentUser = data.user;
+                    localStorage.setItem('authToken', authToken);
+                    localStorage.setItem('user', JSON.stringify(currentUser));
+                    document.getElementById('loginModal').classList.remove('show');
+                    showToast(`Welcome back, ${currentUser.full_name || currentUser.email}`);
+                    fetchUserData();
+                } else {
+                    showToast(data.error || 'Login failed', true);
+                }
+            } catch(e) { showToast('Network error', true); }
+        }
+
+        async function register() {
+            const fullName = document.getElementById('regFullName').value;
+            const email = document.getElementById('regEmail').value;
+            const phone = document.getElementById('regPhone').value;
+            const password = document.getElementById('regPassword').value;
+            const confirm = document.getElementById('regConfirmPassword').value;
+            
+            if (!fullName || !email || !password) { showToast('Please fill all fields', true); return; }
+            if (password !== confirm) { showToast('Passwords do not match', true); return; }
+            
+            try {
+                const res = await fetch(`${API_URL}/api/auth/register`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password, full_name: fullName, phone_number: phone })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast('Registration successful! Please login.');
+                    switchTab('login');
+                } else {
+                    showToast(data.error || 'Registration failed', true);
+                }
+            } catch(e) { showToast('Network error', true); }
+        }
+
+        async function fetchUserData() {
+            try {
+                const res = await fetch(`${API_URL}/api/wallet/balance`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('totalBalance').innerText = `$${data.balance.toFixed(2)}`;
+                    document.getElementById('walletBalanceAmount').innerText = `$${data.balance.toFixed(2)}`;
+                    document.getElementById('welcomeName').innerText = currentUser?.full_name?.split(' ')[0] || 'User';
+                    document.getElementById('userName').innerText = currentUser?.full_name || 'User';
+                    document.getElementById('userEmail').innerText = currentUser?.email || '';
+                    document.getElementById('userAvatar').innerText = (currentUser?.full_name?.charAt(0) || 'U').toUpperCase();
+                    document.getElementById('profileFullName').value = currentUser?.full_name || '';
+                    document.getElementById('profileEmail').value = currentUser?.email || '';
+                    document.getElementById('profilePhone').value = currentUser?.phone_number || '';
+                    document.getElementById('logoutBtn').style.display = 'flex';
+                    fetchTransactions();
+                    fetchFeeRates();
+                }
+            } catch(e) { console.error('Error:', e); }
+        }
+
+        async function fetchFeeRates() {
+            try {
+                const res = await fetch(`${API_URL}/api/fees/rates`);
+                const data = await res.json();
+                if (data.success && data.rates.length > 0) {
+                    const rate = data.rates.find(r => r.transaction_type === 'internal_transfer');
+                    if (rate) {
+                        document.getElementById('feeRate').innerText = `${rate.fee_percent}%`;
+                        document.getElementById('displayFeePercent').innerText = `${rate.fee_percent}%`;
+                        document.getElementById('feePercent').innerText = rate.fee_percent;
+                    }
+                }
+            } catch(e) {}
+        }
+
+        async function fetchTransactions() {
+            try {
+                const res = await fetch(`${API_URL}/api/transactions/history`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    displayTransactions(data.transactions);
+                }
+            } catch(e) {}
+        }
+
+        function displayTransactions(transactions) {
+            const container = document.getElementById('transactionsList');
+            const recentContainer = document.getElementById('recentTransactions');
+            
+            if (!transactions || transactions.length === 0) {
+                container.innerHTML = '<tr><td colspan="6"><div class="empty-state"><i class="fas fa-exchange-alt"></i><p>No transactions found</p></div></td></tr>';
+                recentContainer.innerHTML = '<div class="empty-state"><i class="fas fa-exchange-alt"></i><p>No transactions yet</p></div>';
+                return;
+            }
+            
+            const recent = transactions.slice(0, 5);
+            recentContainer.innerHTML = recent.map(t => `
+                <div class="transaction-item">
+                    <div class="transaction-left">
+                        <div class="transaction-icon ${t.type === 'deposit' ? 'received' : 'sent'}">
+                            <i class="fas ${t.type === 'deposit' ? 'fa-download' : 'fa-paper-plane'}"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <h4>${t.type === 'deposit' ? 'Money Added' : `Sent to ${t.receiver_name || 'User'}`}</h4>
+                            <p>${new Date(t.created_at).toLocaleString()}</p>
+                        </div>
+                    </div>
+                    <div class="transaction-amount">
+                        <div class="amount ${t.type === 'deposit' ? 'received' : 'sent'}">${t.type === 'deposit' ? '+' : '-'}$${parseFloat(t.amount).toFixed(2)}</div>
+                        ${t.fee_amount ? `<div class="fee">Fee: $${parseFloat(t.fee_amount).toFixed(2)}</div>` : ''}
+                    </div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = transactions.map(t => `
+                <tr>
+                    <td>${new Date(t.created_at).toLocaleDateString()}</td>
+                    <td>${t.type === 'deposit' ? '<span class="status-badge completed">Received</span>' : '<span class="status-badge completed">Sent</span>'}</td>
+                    <td>${t.type === 'deposit' ? 'Deposit' : (t.receiver_name || t.receiver_email || 'User')}</td>
+                    <td style="color: ${t.type === 'deposit' ? '#10B981' : '#EF4444'}">${t.type === 'deposit' ? '+' : '-'}$${parseFloat(t.amount).toFixed(2)}</td>
+                    <td>${t.fee_amount ? `$${parseFloat(t.fee_amount).toFixed(2)}` : '-'}</td>
+                    <td><span class="status-badge completed">Completed</span></td>
+                </tr>
+            `).join('');
+        }
+
+        async function calculateFeePreview() {
+            const amount = parseFloat(document.getElementById('transferAmount').value);
+            if (!amount || amount <= 0) {
+                document.getElementById('feePreview').style.display = 'none';
+                return;
+            }
+            
+            try {
+                const res = await fetch(`${API_URL}/api/fees/calculate`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ amount, transaction_type: 'internal_transfer' })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('previewAmount').innerText = `$${data.original_amount.toFixed(2)}`;
+                    document.getElementById('previewFee').innerText = `$${data.fee_amount.toFixed(2)}`;
+                    document.getElementById('previewNet').innerText = `$${data.net_amount.toFixed(2)}`;
+                    document.getElementById('feePreview').style.display = 'block';
+                }
+            } catch(e) {}
+        }
+
+        async function sendMoney() {
+            const receiverEmail = document.getElementById('receiverEmail').value;
+            const amount = parseFloat(document.getElementById('transferAmount').value);
+            const note = document.getElementById('transferNote').value;
+            
+            if (!receiverEmail) { showToast('Please enter recipient email', true); return; }
+            if (!amount || amount <= 0) { showToast('Please enter valid amount', true); return; }
+            
+            try {
+                const res = await fetch(`${API_URL}/api/transfer/internal`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify({ receiver_email: receiverEmail, amount, note })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(`Sent $${amount} to ${receiverEmail}. Fee: $${data.fee_amount}`);
+                    document.getElementById('receiverEmail').value = '';
+                    document.getElementById('transferAmount').value = '';
+                    document.getElementById('transferNote').value = '';
+                    document.getElementById('feePreview').style.display = 'none';
+                    fetchUserData();
+                    fetchTransactions();
+                } else {
+                    showToast(data.error || 'Transfer failed', true);
+                }
+            } catch(e) { showToast('Network error', true); }
+        }
+
+        async function processDeposit() {
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            if (!amount || amount < 1) { showToast('Please enter valid amount', true); return; }
+            showToast('Payment processing... (Demo mode)');
+            setTimeout(async () => {
+                try {
+                    const res = await fetch(`${API_URL}/api/wallet/deposit`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                        body: JSON.stringify({ amount })
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        showToast(`$${amount} added successfully!`);
+                        closeModal('depositModal');
+                        fetchUserData();
+                        fetchTransactions();
+                        document.getElementById('depositAmount').value = '';
+                    } else {
+                        showToast(data.error || 'Deposit failed', true);
+                    }
+                } catch(e) { showToast('Network error', true); }
+            }, 1500);
+        }
+
+        function processWithdraw() { showToast('Withdrawal feature coming soon', true); }
+        function updateProfile() { showToast('Profile updated successfully'); }
+        function changePassword() { showToast('Password changed successfully'); }
+        function setDepositAmount(amount) { document.getElementById('depositAmount').value = amount; }
+        function navigateTo(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(`${page}Page`).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active');
+        }
+        function showDepositModal() { document.getElementById('depositModal').classList.add('show'); }
+        function showWithdrawModal() { document.getElementById('withdrawModal').classList.add('show'); }
+        function closeModal(modalId) { document.getElementById(modalId).classList.remove('show'); }
+        function logout() { localStorage.clear(); location.reload(); }
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').innerText = msg;
+            toast.style.borderColor = isError ? '#EF4444' : '#10B981';
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>
